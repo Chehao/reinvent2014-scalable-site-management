@@ -275,23 +275,31 @@ class Update(Operation):
             time.sleep(self.reboot_delay)
 
     def _create_deployment_arguments(self, instance_ids, comment, custom_json):
-        parsed_custom_json = json.loads(custom_json)
-        default_custom_json = {
-            'dependencies': {
-                'allow_reboot': self.allow_reboot
+        if (custom_json is not None):
+            parsed_custom_json = json.loads(custom_json)
+            default_custom_json = {
+                'dependencies': {
+                    'allow_reboot': self.allow_reboot
+                }
             }
-        }
-        parsed_custom_json.update(default_custom_json)
-        if self.amazon_linux_release is not None:
-            custom_json['dependencies']['os_release_version'] = self.amazon_linux_release
+            parsed_custom_json.update(default_custom_json)
+            if self.amazon_linux_release is not None:
+                custom_json['dependencies']['os_release_version'] = self.amazon_linux_release
 
-        return {
-            'StackId': self.stack_id,
-            'InstanceIds': instance_ids,
-            'Command': {'Name': self.command},
-            'Comment': comment,
-            'CustomJson': json.dumps(parsed_custom_json)
-        }
+            return {
+                'StackId': self.stack_id,
+                'InstanceIds': instance_ids,
+                'Command': {'Name': self.command},
+                'Comment': comment,
+                'CustomJson': json.dumps(parsed_custom_json)
+            }
+        else:
+            return {
+                'StackId': self.stack_id,
+                'InstanceIds': instance_ids,
+                'Command': {'Name': self.command},
+                'Comment': comment
+            }    
 
 
 class Deploy(Operation):
