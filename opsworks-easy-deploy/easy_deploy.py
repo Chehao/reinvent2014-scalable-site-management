@@ -345,6 +345,7 @@ class Deploy(Operation):
         else:
             return {
                 'StackId': self.stack_id,
+                'AppId': self.application_id,
                 'InstanceIds': instance_ids,
                 'Command': {'Name': self.command},
                 'Comment': comment
