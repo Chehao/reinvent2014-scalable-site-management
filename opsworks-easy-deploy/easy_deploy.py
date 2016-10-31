@@ -333,14 +333,22 @@ class Deploy(Operation):
         return self._application_id
 
     def _create_deployment_arguments(self, instance_ids, comment, custom_json):
-        return {
-            'StackId': self.stack_id,
-            'AppId': self.application_id,
-            'InstanceIds': instance_ids,
-            'Command': {'Name': self.command},
-            'Comment': comment,
-            'CustomJson': custom_json
-        }
+        if (custom_json is not None):
+            return {
+                'StackId': self.stack_id,
+                'AppId': self.application_id,
+                'InstanceIds': instance_ids,
+                'Command': {'Name': self.command},
+                'Comment': comment,
+                'CustomJson': custom_json
+            }
+        else:
+            return {
+                'StackId': self.stack_id,
+                'InstanceIds': instance_ids,
+                'Command': {'Name': self.command},
+                'Comment': comment
+            }   
 
 
 def log(message):
